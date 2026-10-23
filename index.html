@@ -77,6 +77,23 @@
     </div>
   </div>
 
+  <!-- Полноэкранный просмотр изображения -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Просмотр изображения" aria-hidden="true" tabindex="-1">
+    <button class="lightbox__close" data-lb-close aria-label="Закрыть">
+      <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" /></svg>
+    </button>
+    <button class="lightbox__nav lightbox__nav--prev" data-lb-step="-1" aria-label="Предыдущее изображение">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+    </button>
+    <figure class="lightbox__figure">
+      <img id="lbImg" alt="" />
+      <figcaption><span class="lightbox__count" id="lbCount"></span><span id="lbCaption"></span></figcaption>
+    </figure>
+    <button class="lightbox__nav lightbox__nav--next" data-lb-step="1" aria-label="Следующее изображение">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+    </button>
+  </div>
+
   <script src="data.js"></script>
   <script src="script.js"></script>
 </body>

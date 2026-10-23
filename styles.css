@@ -201,6 +201,38 @@ h3 { font-size: 1.05rem; letter-spacing: -0.02em; }
 .dw__next-title span { display: inline-block; transition: transform 0.4s var(--ease); }
 .dw__next:hover .dw__next-title span { transform: translateX(8px); }
 
+.dw__frame img[data-lb-index] { cursor: zoom-in; }
+
+/* ---------- Lightbox ---------- */
+.lightbox {
+  position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; padding: 24px 88px;
+  background: rgba(12, 12, 12, 0.94); visibility: hidden; opacity: 0;
+  transition: opacity 0.35s var(--ease), visibility 0s linear 0.35s;
+}
+.lightbox.is-open { visibility: visible; opacity: 1; transition-delay: 0s; }
+.lightbox:focus { outline: none; }
+.lightbox__figure { margin: 0; display: flex; flex-direction: column; align-items: center; max-width: 100%; }
+.lightbox__figure img {
+  max-width: 100%; max-height: calc(100vh - 140px); width: auto; height: auto; object-fit: contain; border-radius: 6px;
+  transform: scale(0.97); transition: transform 0.45s var(--ease);
+}
+.lightbox.is-open .lightbox__figure img { transform: none; }
+.lightbox figcaption {
+  margin-top: 18px; max-width: 760px; color: rgba(255, 255, 255, 0.8); font-size: 0.9rem; line-height: 1.5;
+  text-align: center; text-wrap: balance;
+}
+.lightbox__count { color: rgba(255, 255, 255, 0.45); margin-right: 12px; font-variant-numeric: tabular-nums; }
+.lightbox__close { position: absolute; top: 16px; right: 16px; width: 44px; height: 44px; display: grid; place-items: center; color: var(--white); transition: transform 0.4s var(--ease); }
+.lightbox__close:hover { transform: rotate(90deg); }
+.lightbox__nav {
+  position: absolute; top: 50%; translate: 0 -50%; width: 52px; height: 52px; border-radius: 50%;
+  display: grid; place-items: center; color: var(--white); background: rgba(255, 255, 255, 0.08); transition: background 0.3s var(--ease);
+}
+.lightbox__nav:hover { background: rgba(255, 255, 255, 0.18); }
+.lightbox__nav--prev { left: 20px; }
+.lightbox__nav--next { right: 20px; }
+.lightbox.is-single .lightbox__nav { display: none; }
+
 /* Вертикальные скриншоты в карточках ленты */
 .media.is-portrait .media__img { object-fit: contain; padding: 20px; }
 
@@ -228,6 +260,12 @@ h3 { font-size: 1.05rem; letter-spacing: -0.02em; }
 
   .show-card { flex-basis: 80vw; }
   .drawer__sheet { top: 40px; }
+  .lightbox { padding: 64px 12px 24px; }
+  .lightbox__figure img { max-height: calc(100svh - 190px); }
+  .lightbox__nav { top: auto; bottom: 20px; translate: none; width: 44px; height: 44px; }
+  .lightbox__nav--prev { left: calc(50% - 56px); }
+  .lightbox__nav--next { right: calc(50% - 56px); }
+  .lightbox figcaption { margin-bottom: 64px; }
   .drawer__close { top: 2px; right: 8px; }
   .drawer__content { padding: 40px 0 72px; }
   .dw__info { grid-template-columns: 1fr; gap: 40px; margin: 40px 0 56px; }

@@ -88,9 +88,11 @@ let lastFocus = null;
 const slugOf = (w, i) => w.slug || String(i);
 const paragraphs = (d) => (Array.isArray(d) ? d : d ? [d] : []).map((t) => `<p>${t}</p>`).join("");
 
-function figure(img, cls = "") {
+let currentImages = [];
+
+function figure(img, index, cls = "") {
   return `<figure class="dw__figure ${cls}">
-    <div class="dw__frame"><img src="${img.src}" alt="${img.caption || ""}" loading="lazy" onload="${markOrientation}"></div>
+    <div class="dw__frame"><img src="${img.src}" alt="${img.caption || ""}" data-lb-index="${index}" loading="lazy" onload="${markOrientation}"></div>
     ${img.caption ? `<figcaption>${img.caption}</figcaption>` : ""}
   </figure>`;
 }
@@ -99,6 +101,7 @@ function renderDrawer(i) {
   const w = WORKS[i];
   const images = w.images && w.images.length ? w.images : w.image ? [{ src: w.image }] : [];
   const [hero, ...rest] = images;
+  currentImages = images;
   const next = WORKS[(i + 1) % WORKS.length];
   const meta = [
     ["Клиент", w.client],
@@ -110,7 +113,7 @@ function renderDrawer(i) {
   drawerContent.innerHTML = `
     <article class="dw">
       <h2 class="dw__title" id="drawerTitle">${w.title}</h2>
-      ${hero ? figure(hero, "dw__hero") : `<div class="dw__hero dw__frame media">${media(w, i)}</div>`}
+      ${hero ? figure(hero, 0, "dw__hero") : `<div class="dw__hero dw__frame media">${media(w, i)}</div>`}
 
       <div class="dw__info">
         <div class="dw__text">
@@ -124,7 +127,7 @@ function renderDrawer(i) {
         </aside>
       </div>
 
-      ${rest.length ? `<div class="dw__gallery">${rest.map((img) => figure(img)).join("")}</div>` : ""}
+      ${rest.length ? `<div class="dw__gallery">${rest.map((img, k) => figure(img, k + 1)).join("")}</div>` : ""}
 
       <a class="dw__next" href="#/work/${slugOf(next, WORKS.indexOf(next))}">
         <span class="dw__next-label">Следующий проект</span>
@@ -192,9 +195,73 @@ document.addEventListener("click", (e) => {
   }
 });
 drawer.addEventListener("click", (e) => e.target.closest("[data-close]") && closeDrawer());
-document.addEventListener("keydown", (e) => e.key === "Escape" && closeDrawer());
+document.addEventListener("keydown", (e) => e.key === "Escape" && !lightbox.classList.contains("is-open") && closeDrawer());
 addEventListener("popstate", syncWithHash);
 syncWithHash();
+
+// ---------- Полноэкранный просмотр изображения ----------
+const lightbox = document.getElementById("lightbox");
+const lbImg = document.getElementById("lbImg");
+const lbCaption = document.getElementById("lbCaption");
+const lbCount = document.getElementById("lbCount");
+let lbIndex = 0;
+
+function showLightboxImage(index) {
+  const n = currentImages.length;
+  lbIndex = (index + n) % n;
+  const img = currentImages[lbIndex];
+  lbImg.src = img.src;
+  lbImg.alt = img.caption || "";
+  lbCaption.textContent = img.caption || "";
+  lbCount.textContent = n > 1 ? `${lbIndex + 1} / ${n}` : "";
+  lightbox.classList.toggle("is-single", n < 2);
+}
+
+function openLightbox(index) {
+  if (!currentImages.length) return;
+  showLightboxImage(index);
+  lightbox.classList.add("is-open");
+  lightbox.setAttribute("aria-hidden", "false");
+  lightbox.focus({ preventScroll: true });
+}
+
+function closeLightbox() {
+  lightbox.classList.remove("is-open");
+  lightbox.setAttribute("aria-hidden", "true");
+  drawerSheet.focus({ preventScroll: true });
+}
+
+drawerContent.addEventListener("click", (e) => {
+  const img = e.target.closest("img[data-lb-index]");
+  if (img) openLightbox(+img.dataset.lbIndex);
+});
+
+lightbox.addEventListener("click", (e) => {
+  const step = e.target.closest("[data-lb-step]");
+  if (step) return showLightboxImage(lbIndex + +step.dataset.lbStep);
+  // Клик по фону или крестику закрывает, по самой картинке — нет
+  if (e.target.closest("[data-lb-close]") || !e.target.closest("img, figcaption")) closeLightbox();
+});
+
+document.addEventListener("keydown", (e) => {
+  if (!lightbox.classList.contains("is-open")) return;
+  if (e.key === "Escape") closeLightbox();
+  if (e.key === "ArrowRight") showLightboxImage(lbIndex + 1);
+  if (e.key === "ArrowLeft") showLightboxImage(lbIndex - 1);
+});
+
+// Свайп на телефоне
+let touchX = null;
+lightbox.addEventListener("touchstart", (e) => (touchX = e.touches[0].clientX), { passive: true });
+lightbox.addEventListener("touchend", (e) => {
+  if (touchX === null) return;
+  const dx = e.changedTouches[0].clientX - touchX;
+  if (Math.abs(dx) > 50) showLightboxImage(lbIndex + (dx < 0 ? 1 : -1));
+  touchX = null;
+});
+
+// При закрытии дровера закрываем и просмотр
+addEventListener("popstate", () => lightbox.classList.contains("is-open") && !drawer.classList.contains("is-open") && closeLightbox());
 
 // ---------- Шапка ----------
 const header = document.getElementById("header");
