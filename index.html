@@ -3,11 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Алмаз Рамазанов — Разработчик</title>
-  <meta name="description" content="Алмаз Рамазанов — разработчик. Мои работы и контакты." />
+  <title>Алмаз Рамазанов</title>
+  <meta name="description" content="Алмаз Рамазанов - разработчик цифровых продуктов. Мои работы и контакты." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -33,7 +35,7 @@
           <div>
             <h1 class="hero__title" id="heroTitle">Алмаз<br />Рамазанов</h1>
             <div class="hero__meta">
-              <p class="hero__sub">— Разработчик</p>
+              <p class="hero__sub">- Разработчик цифровых продуктов</p>
               <div class="hero__socials">
                 <a href="https://t.me/seasoned_tofu" target="_blank" rel="noopener">
                   <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11.944 0A12 12 0 1 0 12 24a12 12 0 0 0-.056-24Zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635Z"/></svg>
@@ -54,7 +56,6 @@
               </div>
             </div>
           </div>
-          <a href="#works" class="hero__scroll">Листайте вниз <span>↓</span></a>
         </div>
       </div>
     </section>
@@ -65,18 +66,14 @@
     </section>
   </main>
 
-  <!-- Модальное окно проекта -->
-  <div class="modal" id="modal" aria-hidden="true">
-    <div class="modal__backdrop" data-close></div>
-    <div class="modal__card" role="dialog" aria-modal="true">
-      <button class="modal__close round-btn round-btn--light" data-close aria-label="Закрыть">✕</button>
-      <div class="modal__cover media" id="modalCover"></div>
-      <div class="modal__body">
-        <div class="tags" id="modalTags"></div>
-        <h3 id="modalTitle"></h3>
-        <p class="muted" id="modalText"></p>
-        <a href="#" class="btn btn--dark" id="modalLink" target="_blank" rel="noopener">Открыть проект <span>↗</span></a>
-      </div>
+  <!-- Дровер проекта -->
+  <div class="drawer" id="drawer" aria-hidden="true">
+    <div class="drawer__backdrop" data-close></div>
+    <button class="drawer__close" data-close aria-label="Закрыть">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" /></svg>
+    </button>
+    <div class="drawer__sheet" id="drawerSheet" role="dialog" aria-modal="true" aria-labelledby="drawerTitle" tabindex="-1">
+      <div class="drawer__content" id="drawerContent"></div>
     </div>
   </div>
 
